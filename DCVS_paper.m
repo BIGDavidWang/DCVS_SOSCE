@@ -15,16 +15,14 @@ ever_subrate = zeros(frame_No/2,1);
 result_list_fast = zeros(frame_No/2,10);
 fai = randn(round(column*line/2),column*line);
 tao = 30; 
+filename = yuvfilename{sequence_cnt};
+Y1 = ReadMultiFrames(filename,'qcif',[0,100]);
+Y = zeros(size(Y1));
+load([filename,'.key.mat']);
+Y(:,:,2:2:end) = Y1(:,:,2:2:end);
+Y(:,:,1:2:end) = Key_frames;     
 for n = 2:2:frame_No 
     current_estimate_points_No = 24;
-    
-    filename = yuvfilename{sequence_cnt};
-    Y1 = ReadMultiFrames(filename,'qcif',[0,100]);
-    
-    Y = zeros(size(Y1));
-    load([filename,'.key.mat']);
-    Y(:,:,2:2:end) = Y1(:,:,2:2:end);
-    Y(:,:,1:2:end) = Key_frames;     
     orig_frame = Y(:,:,n);
     imwrite(uint8(orig_frame),['...\nonkey_frames\','Recon_NonKeyF_',num2str(n),'.jpeg']);
     if n == 2
